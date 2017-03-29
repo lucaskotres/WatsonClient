@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 from flask import Flask
 from flask_socketio import SocketIO
 
 socketio = SocketIO()
-
+response = dict(status=None)
 
 def create_app(debug=False):
     """Create an application."""

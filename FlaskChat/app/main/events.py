@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import session
 from flask_socketio import emit, join_room, leave_room
 from .. import socketio
@@ -12,7 +13,7 @@ conversation = ConversationV1(
 # replace with your own workspace_id
 workspace_id = '97f9058e-9f52-4d7c-8bba-bb45d485c071'
 
-
+response = dict(status=None)
 
 @socketio.on('joined', namespace='/chat')
 def joined(message):
@@ -21,8 +22,6 @@ def joined(message):
     room = session.get('room')
     join_room(room)
     emit('status', {'msg': session.get('name') + ' iniciou o chat'}, room=room)
-    response = conversation.message(workspace_id=workspace_id, message_input={
-        'text': 'Ola'})
 
 
 @socketio.on('text', namespace='/chat')
@@ -31,13 +30,23 @@ def text(message):
     The message is sent to all people in the room."""
     room = session.get('room')
     emit('message', {'msg': session.get('name') + ':' + message['msg']}, room=room)
-
-    response = conversation.message(workspace_id=workspace_id, message_input={
+    global response
+    try:
+        response = conversation.message(workspace_id=workspace_id, message_input={
         'text': message['msg']}, context=response['context'])
+        print(json.dumps(response, indent=2,ensure_ascii=False, encoding="utf-8"))
+    except:
+        response = conversation.message(workspace_id=workspace_id, message_input={
+        'text': message['msg']})
+        print(json.dumps(response, indent=2,ensure_ascii=False, encoding="utf-8"))
 
-    print(json.dumps(response, indent=2))
-    emit('message', {'msg': 'SuporteBot' + ':' + json.dumps(response, indent=2)}, room=room)
-    #emit('message',{'msg': 'SuporteBot' + ':' + json.dumps(response['text'])},room=room)
+
+
+
+    emit('message', {'msg': 'Intenção' + ':' + json.dumps(response['intents'], indent=2)}, room=room)
+    emit('message', {'msg': 'SuporteBot' + ':' + json.dumps(response['output']['text'], indent=2, ensure_ascii=False)}, room=room)
+    emit('message', {'msg': 'ErrorLog' + ':' + json.dumps(response['output']['log_messages'], indent=2)}, room=room)
+
 
 
 @socketio.on('left', namespace='/chat')
