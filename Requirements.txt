@@ -1,2 +1,0 @@
-flask;
-watson-developer-cloud;

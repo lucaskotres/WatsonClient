@@ -7,18 +7,15 @@ conversation = ConversationV1(
     version='2016-09-20')
 
 # replace with your own workspace_id
-workspace_id = '793ec723-0da4-478f-b8ac-aaa7c9d864ed'
+workspace_id = '97f9058e-9f52-4d7c-8bba-bb45d485c071'
 
 response = dict(status=None)
 
 response = conversation.message(workspace_id=workspace_id, message_input={
-    'text': 'ola'})
+    'text': 'oi'})
 print(json.dumps(response, indent=2))
 
-response = conversation.message(workspace_id=workspace_id, message_input={
-    'text': 'o e3 possui modo demo?'},
-                                context=response['context'])
-print(json.dumps(response, indent=2))
+
 
 
 
