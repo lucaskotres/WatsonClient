@@ -37,7 +37,6 @@ def joined(message):
     logging.debug(json.dumps(response, indent=2, ensure_ascii=False, encoding="utf-8"))
     emit('message', {'msg': 'SuporteBot' + ':' + json.dumps(response['output']['text'], indent=2, ensure_ascii=False)}, room=room)
 
-
 @socketio.on('text', namespace='/chat')
 def text(message):
     """Sent by a client when the user entered a new message.
@@ -45,23 +44,21 @@ def text(message):
     room = session.get('room')
     emit('message', {'msg': session.get('name') + ':' + message['msg']}, room=room)
 
-
     global response
     try:
         response = conversation.message(workspace_id=workspace_id, message_input={
         'text': message['msg']}, context=response['context'])
         logging.debug(json.dumps(response, indent=2,ensure_ascii=False, encoding="utf-8"))
+
+
     except:
         response = conversation.message(workspace_id=workspace_id, message_input={
         'text': message['msg']})
         logging.debug(json.dumps(response, indent=2,ensure_ascii=False, encoding="utf-8"))
 
-
     #emit('message', {'msg': 'Intenção' + ':' + json.dumps(response['intents'], indent=2)}, room=room)
     emit('message', {'msg': 'SuporteBot' + ':' + json.dumps(response['output']['text'], indent=2, ensure_ascii=False)}, room=room)
     #emit('message', {'msg': 'ErrorLog' + ':' + json.dumps(response['output']['log_messages'], indent=2)}, room=room)
-
-
 
 @socketio.on('left', namespace='/chat')
 def left(message):
@@ -70,4 +67,3 @@ def left(message):
     room = session.get('room')
     leave_room(room)
     emit('status', {'msg': session.get('name') + ' has left the room.'}, room=room)
-
