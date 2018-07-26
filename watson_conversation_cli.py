@@ -7,7 +7,7 @@ conversation = ConversationV1(
     version='2016-09-20')
 
 # replace with your own workspace_id
-workspace_id = '97f9058e-9f52-4d7c-8bba-bb45d485c071'
+workspace_id = '97f9058e-9f52-4d7c-8bbc071'
 
 response = dict(status=None)
 
